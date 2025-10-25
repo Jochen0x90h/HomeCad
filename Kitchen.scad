@@ -10,7 +10,7 @@ fliesenspiegelOben = fliesenspiegelUnten + 600;
 
 // Breiten 60 und 50cm
 breite60 = 600;
-breite50 = 500;
+breite50 = 495;
 
 // Höhe und Tiefe der Unterschränke
 hoeheUnter = 800;
@@ -28,8 +28,8 @@ sockel = fliesenspiegelUnten - dickeArbeitsplatte - hoeheUnter;
 echo("Sockel", sockel);
 
 // Überstand der Türen in die Griffmulde nach oben
-ueberstandOben = 12;
-ueberstandUnten = 3;
+ueberstandOben = 10;
+//ueberstandUnten = 3;
 
 // Griffmulde oben
 hoeheMuldeOben = 49;//49.3;
@@ -75,13 +75,20 @@ module Griffmulde(b, h) {
 // @param h Höhe der Front
 module Front(H, b, h) {
     // Zwischenräume rechts und links
-    bm = b - luft;
-    //hm = h - luft;
+    Z1 = H + luft/2;
+    Z2 = H + h - luft/2;
+    bl = b - luft;
+    hl = h - luft;
     
     color([1, 1, 1])
-        translate([luft/2, -dicke, H])
-            cube([bm, dicke, h], false);
-    echo("Front", bm, h);
+    translate([luft/2, -dicke, Z1])
+        cube([bl, dicke, hl], false);
+    echo("Front",
+        bl, hl, // Größe
+        floor((Z1+90)/50)*50 - Z1, // Bohrung unten
+        Z2 - ceil((Z2-90)/50)*50 // Bohrung oben
+        );
+    //echo("H", floor((H+90)/50)*50 - Hl);
 }
 
 // Front mit Griff horizontal oben mittig
@@ -204,11 +211,12 @@ module GriffVUL(H, b, h) {
             cube([O, B, A], false);
 }
 
-// Ofen
+// Ofen (595mm hoch)
 // @param H Höhe über Nullpunkt
 module Ofen(H) {
     color([0, 0, 0])
         translate([3, -dicke, H])
+            //cube([594, dicke, 595 - 96], false);
             cube([594, dicke, 595 - 96], false);
 
     color([0.5, 0.5, 0.5])
@@ -228,12 +236,12 @@ translate([0, -tiefeUnter, sockel]) {
     difference() {
         union() {
             // links: 4 Schubladen
-            translate([-100, 0, 0]) {
+            translate([0, 0, 0]) {
                 KorpusUnter(breite60, tiefeUnter, hoeheUnter, "Unter alt");
 
-                GriffHOM(0, breite60, 200 - luft);
-                GriffHOM(200, breite60, 200 - luft);
-                GriffHOM(400, breite60, 200 - luft);
+                GriffHOM(0, breite60, 200);
+                GriffHOM(200, breite60, 200);
+                GriffHOM(400, breite60, 200);
                 GriffHOM(600, breite60, 200 - luftMuldeOben);
                 
 
@@ -247,34 +255,34 @@ translate([0, -tiefeUnter, sockel]) {
             }
             
             // Spüle
-            translate([500, 0, 0]) {
+            translate([600, 0, 0]) {
                 KorpusUnter(breite60, tiefeUnter, hoeheUnter, "Ofen/Spüle alt");
 
                 GriffHOR(0, breite60, hoeheUnter - luftMuldeOben);
             }
             
             // Geschirrspüler
-            translate([1100, 0, 0]) {
+            translate([1200, 0, 0]) {
                 //KorpusUnter(breite60, tiefeUnter, hoeheUnter);
             
                 GriffHOM(0, breite60, hoeheUnter - luftMuldeOben);
             }
 
             // Ofen
-            translate([1700, 0, 0]) {
+            translate([1800, 0, 0]) {
                 KorpusUnter(breite60, tiefeUnter, hoeheUnter, "Ofen/Spüle neu");
 
                 Ofen(166);
-                GriffHOM(0, breite60, 162);
+                GriffHOM(0, breite60, 166);
             }
 
             // Besteckkasten, 2 Schubladen
-            translate([2300, 0, 0]) {
-                KorpusUnter(breite60, tiefeUnter, hoeheUnter, "Unter alt");
+            translate([2400, 0, 0]) {
+                KorpusUnter(breite50, tiefeUnter, hoeheUnter, "Unter alt");
 
-                GriffHOM(0, breite60, 200 - luft);
-                GriffHOM(200, breite60, 400 - luft);
-                GriffHOM(600, breite60, 200 - luftMuldeOben);
+                GriffHOM(0, breite50, 300);
+                GriffHOM(300, breite50, 300);
+                GriffHOM(600, breite50, 200 - luftMuldeOben);
 
 /*
                 GriffHOM(0, breite50, griffMitteZ1 + ueberstandOben);
@@ -313,22 +321,22 @@ translate([0, -tiefeUnter, sockel]) {
                 // Kühlschranktüren
                 //uh = 722+18; // max
                 //uh = 695+18; // min
-                uh = 730;
+                uh = 735;
                 GriffVOL(0, breite60, uh);
-                GriffVUL(uh + luft, breite60, 2000 - uh - luft * 2);
+                GriffVUL(uh, breite60, 2000 - uh);
                 
                 
                 // Korpus über Kühlschrank
                 translate([0, 0, 2000]) {
-                    h = fliesenspiegelOben + hoeheOber - (2000 + sockel);
+                    h = 442;//fliesenspiegelOben + hoeheOber - (2000 + sockel);
                     Korpus(breite60, tiefeUnter, h, "Aufsatz neu");
                     GriffVUL(0, breite60, h);
                 }
             }
             
             // Griffmulden
-            translate([-100, -1, hoeheUnter - hoeheMuldeOben])
-                Griffmulde(4*600+600, hoeheMuldeOben);
+            translate([0, -1, hoeheUnter - hoeheMuldeOben])
+                Griffmulde(4*600+500, hoeheMuldeOben);
             //translate([0, -1, griffMitteZ1])
             //    Griffmulde(600, hoeheGriffMitte);
             //translate([4*600, -1, griffMitteZ1])
@@ -342,7 +350,7 @@ translate([0, -tiefeUnter, sockel]) {
 translate([0, -tiefeOber, fliesenspiegelOben]) {
     translate([0, 0, 0]) {
         Korpus(breite60, tiefeOber, hoeheOber, "Ober neu");
-        GriffVUR(0, breite60, hoeheOber);       
+        GriffVUR(0, breite60, hoeheOber);
     }
     translate([600, 0, 0]) {
         Korpus(breite60, tiefeOber, hoeheOber, "Ober neu");
@@ -364,7 +372,8 @@ translate([0, -tiefeOber, fliesenspiegelOben]) {
         Korpus(breite50, tiefeOber, hoeheOber, "Ober neu");
         
         Mikrowelle(0);
-        GriffVUL(385, breite50, hoeheOber - 385);
+        //GriffVUL(385, breite50, hoeheOber - 385);
+        GriffVUL(386, breite50, 614);
     }
 }
 
