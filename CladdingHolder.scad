@@ -9,34 +9,39 @@ coneHeight = 2;
 
 screwDiameter = 3.0;
 screwHeadDiameter = 7;
-screwLength = 5;
+screwLength = 10;
 screwConeHeight = 2.5;
+
+//adjust = 0; // position 1
+adjust = 1; // position 2
+//adjust = 0; // position 3
 
 difference() {
     union() {
-        translate([0, -width/2, 0])
+        // holder
+        translate([0, -width/2+adjust, 0])
         cube([width*1.5, width, height/2]);
 
-        // plate
+        // plate positions
         
         // position 1
         //rotate([0, 0, 0])
         
         // position 2
-        //translate([width/2, -width/2, 0])
-        //rotate([0, 0, 90])
+        translate([width/2, -width/2 + adjust, 0])
+        rotate([0, 0, 90])
 
         // position 3
-        translate([width/2, width/2, 0])
-        rotate([0, 0, -90])
+        //translate([width/2, width/2, 0])
+        //rotate([0, 0, -90])
         
+        // plate
         difference() {
             translate([0, -width, 0])
             cube([(width-shaftDiameter)/2, width*2, height]);
 
-
             // screw holes
-            translate([(width-shaftDiameter)/2+0.1, width/2, height*3/4])
+            translate([(width-shaftDiameter)/2+0.1+adjust, width/2, height*3/4])
             rotate([0, -90, 0]) {
                 cylinder(h = screwLength, d = screwDiameter, center = false);
                 cylinder(h = screwConeHeight, d1 = screwHeadDiameter,
@@ -47,16 +52,22 @@ difference() {
                 cylinder(h = screwLength, d = screwDiameter, center = false);
                 cylinder(h = screwConeHeight, d1 = screwHeadDiameter,
                     d2 = screwDiameter, center = false);
-            }   
+            }
+            
+            // center marking
+            translate([(width-shaftDiameter)/2+0.1, 0, height])
+            rotate([0, -90, 0]) {
+                cylinder(h = screwLength, d = 1, center = false);
+            }            
         }
     }
 
     // slot for holding screw
     hull() {
         translate([width/2, 0, -1])
-        cylinder(h = height/2+2, d = shaftDiameter, center = false);
+        cylinder(h = height+2, d = shaftDiameter, center = false);
         translate([width*2, 0, -1])
-        cylinder(h = height/2+2, d = shaftDiameter, center = false);
+        cylinder(h = height+2, d = shaftDiameter, center = false);
     }
     hull() {
         translate([width/2, 0, -1])
@@ -64,10 +75,20 @@ difference() {
         translate([width*2, 0, -1])
         cylinder(h = coneHeight, d1 = coneDiameter, d2 = shaftDiameter, center = false);
     }
+    hull() {
+        translate([width, 0, -1])
+        cylinder(h = coneHeight, d1 = coneDiameter, d2 = shaftDiameter, center = false);
+        translate([width*2, 0, 1])
+        cylinder(h = coneHeight, d1 = coneDiameter, d2 = shaftDiameter, center = false);
+    }
 
     // bevel
-    translate([width*1.5, 0, -9])
-    rotate([0, 80, 0])
+    translate([width*1.5, 0, -9.5])
+    rotate([0, 70, 0])
     cube([20, 20, 20], center = true);   
-}
 
+    translate([22, 0, 0])
+    rotate([0, 0, 45])
+    translate([-5, -5, 0])
+    cube([10, 10, height+1], center = false);   
+}
