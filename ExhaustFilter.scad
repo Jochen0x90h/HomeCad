@@ -1,5 +1,9 @@
 $fn = 128;
 
+// Holder of exhaust filters for the Bosch kitchen range hood DWK67FN60
+
+
+// side 1 or -1
 side = 1;
 
 // height of ring

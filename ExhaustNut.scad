@@ -1,10 +1,12 @@
 $fn = 128;
 
+// Nut for the holder of exhaust filters for the Bosch kitchen range hood DWK67FN60
+// Needs M4 threads inserts
 
 d1 = 4.3 + 0.2; // M4 + tolerance
-d2 = 5.6 + 0.2; // radius of nut + tolerance
+d2 = 5.6 + 0.2; // radius of M4 threads insert + tolerance
 d3a = 7.1;
-d3b = 7.4;
+d3b = 7.4; // upper part that snaps in
 d4 = 10.5;
 
 h1 = 4;

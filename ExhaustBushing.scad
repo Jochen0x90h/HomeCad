@@ -1,5 +1,8 @@
 $fn = 128;
 
+// Bushing for the exhaust pipe of a kitchen range hood
+// With optional cable run
+
 // height of ring
 height = 9.1;
 
@@ -7,7 +10,7 @@ height = 9.1;
 thickness = 2;
 
 // diameters
-diameter1 = 154 + 1; // tolerance
+diameter1 = 154 + 1; // inner diameter + tolerance
 diameter2 = diameter1 + 2 * thickness;
 //diameter3 = 170;
 diameter3 = 182;
