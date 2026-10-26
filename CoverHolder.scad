@@ -68,7 +68,7 @@ module part2() {
         translate([5, -w-3-0.5, -0.1])
         cylinder(h=2.5, d1=8, d2=6);
 
-        translate([5, 0, -4])
+        translate([5, 0, -5])
         rotate([90, 0, 0])
         linear_extrude(height = 10)
         polygon(points=[[-5,0], [5,0], [0,10]]);
@@ -86,9 +86,11 @@ module part2() {
     }
 }
 
-
+// first part, mount on e.g. wall
 part1();
 
+// second part, mount on cover and slide into first part
 //part2();
 
+// debug
 //screw();
